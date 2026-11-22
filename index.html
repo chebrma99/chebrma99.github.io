@@ -13,13 +13,28 @@ header .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 </style>
 </head>
 <body>
-<header><div class="wrap"><strong>Manoja Chebrolu</strong><nav aria-label="Main navigation"><a href="#research">Research</a><a href="#writing">Writing</a><a href="https://github.com/chebrma99">GitHub</a></nav></div></header>
+<header><div class="wrap"><strong>Manoja Chebrolu</strong><nav aria-label="Main navigation"><a href="#home">Home</a><a href="#research">Research</a><a href="#publications">Publications</a><a href="#projects">Projects</a><a href="#blog">Blog</a><a href="#about">About</a></nav></div></header>
 <main class="wrap">
-<div class="hero"><h1>Manoja Chebrolu</h1><p>Software engineering and applied AI research, with a focus on context engineering and evaluating LLM workflows.</p></div>
-<section id="research"><h2>Research</h2><div class="grid">
-<article><h3>ContextBench</h3><p>A benchmark for evaluating context engineering strategies in LLM workflow automation.</p><a href="https://github.com/chebrma99/ContextBench">Explore the benchmark</a></article>
-</div></section>
-<section id="writing"><h2>Engineering notes</h2><div class="grid">
+<div class="hero" id="home"><h1>Manoja Chebrolu</h1><p>Software engineering and applied AI research, with a focus on context engineering and evaluating LLM workflows.</p></div>
+<section id="research" aria-labelledby="research-title">
+<h2 id="research-title">Research</h2>
+<div class="grid">
+<article><h3>Context engineering</h3><p>How do instructions, examples, policies, and retrieved evidence change the decisions a language model makes in an automated workflow?</p></article>
+<article><h3>Workflow evaluation</h3><p>Evaluate structured outputs, trace decisions back to evidence, and measure how often people need to correct or override the model.</p></article>
+</div>
+</section>
+<section id="publications" aria-labelledby="publications-title">
+<h2 id="publications-title">Publications</h2>
+<div class="grid">
+<article><p>Zenodo research record</p><h3>ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</h3><p><a href="https://doi.org/10.5281/zenodo.20823546">View the ContextBench record</a></p></article>
+<article><p>MediArXiv preprint</p><h3>Engagement Optimization in Large-Scale Video Platforms</h3><p>A structured scoping review of metrics, ranking, experimentation, latency, and feedback loops.</p><a href="https://osf.io/preprints/mediarxiv/gp8vy_v2">Read the preprint on OSF</a></article>
+</div>
+</section>
+<section id="projects" aria-labelledby="projects-title">
+<h2 id="projects-title">Projects</h2>
+<div class="grid"><article><h3>ContextBench</h3><p>A reproducible benchmark for comparing context engineering strategies in LLM workflow automation.</p><a href="https://github.com/chebrma99/ContextBench">Explore the source code on GitHub</a></article></div>
+</section>
+<section id="writing" aria-labelledby="blog"><h2 id="blog">Blog</h2><p>Engineering notes on designing and evaluating reliable AI workflows.</p><div class="grid">
 <article class="note" id="evaluating-context"><h3>How to evaluate context in an LLM workflow</h3>
 <p>Start with one task and a clear definition of success. For ticket triage, a useful result might include a routing queue, a priority, and evidence from the ticket that supports both.</p>
 <ol><li><strong>Establish a baseline.</strong> Run the same tickets with the task instructions and no extra context. Record routing accuracy, schema validity, and how often a reviewer corrects the result.</li>
@@ -28,6 +43,10 @@ header .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 <p>Track latency and review effort alongside accuracy. A small gain on routine tickets can be outweighed by extra review on ambiguous cases.</p>
 </article>
 </div></section>
+<section id="about" aria-labelledby="about-title"><h2 id="about-title">About</h2>
+<p>Manoja Chebrolu works in software engineering and applied AI research. Her research focuses on how context affects the reliability of LLM workflows and how to evaluate those systems in reproducible ways.</p>
+<p><a href="https://github.com/chebrma99">Manoja on GitHub</a></p>
+</section>
 </main>
 <footer><div class="wrap"><a href="https://manojachebrolu.blogspot.com/">Blogger editions</a></div></footer>
 </body>
