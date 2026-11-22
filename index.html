@@ -35,6 +35,8 @@ header .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 <div class="grid"><article><h3>ContextBench</h3><p>A reproducible benchmark for comparing context engineering strategies in LLM workflow automation.</p><a href="https://github.com/chebrma99/ContextBench">Explore the source code on GitHub</a></article></div>
 </section>
 <section id="writing" aria-labelledby="blog"><h2 id="blog">Blog</h2><p>Engineering notes on designing and evaluating reliable AI workflows.</p><div class="grid">
+<article><p>Reliable AI · RAG evaluation</p><h3>Why RAG Evaluation Must Separate Retrieval, Grounding, and Generation</h3><p>A practical framework for diagnosing RAG failures by separating retrieval quality, context usability, grounding, answer quality, and operational cost.</p><p><a href="/posts/2026-11-22-rag-evaluation.html">Read the full article</a></p></article>
+<article><p>AI agents · Evaluation</p><h3>Agent Reliability Is More Than Task Success</h3><p>Why multi-step agents should be evaluated for trajectory quality, repeatability, policy adherence, recovery, and machine-verifiable state—not only final task success.</p><p><a href="/posts/2026-11-22-agent-reliability.html">Read the full article</a></p></article>
 <article class="note" id="evaluating-context"><h3>How to evaluate context in an LLM workflow</h3>
 <p>Start with one task and a clear definition of success. For ticket triage, a useful result might include a routing queue, a priority, and evidence from the ticket that supports both.</p>
 <ol><li><strong>Establish a baseline.</strong> Run the same tickets with the task instructions and no extra context. Record routing accuracy, schema validity, and how often a reviewer corrects the result.</li>
