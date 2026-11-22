@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A practical framework for evaluating RAG systems by separating retrieval, grounding, generation, and operational reliability.">
+<link rel="canonical" href="https://chebrma99.github.io/posts/2026-11-22-rag-evaluation.html">
+<title>Why RAG Evaluation Must Separate Retrieval, Grounding, and Generation · Manoja Chebrolu</title>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.72 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.25em}.wrap{width:min(52rem,92%);margin:auto}
+header,footer{border-block:1px solid #d7ded5}header .wrap,footer .wrap{padding:1.1rem 0}
+main{padding:3rem 0 4rem}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.1}h1{font-size:clamp(2.6rem,7vw,4.8rem);letter-spacing:-.045em}h2{font-size:1.8rem;margin-top:2.5rem}
+.meta{color:#5f6e69}.callout{background:#eaf0e8;border-radius:.7rem;padding:1rem 1.2rem;margin:1.5rem 0}
+li{margin:.45rem 0}.refs li{margin:.7rem 0}code{background:#eceee9;padding:.1rem .25rem;border-radius:.2rem}
+</style></head>
+<body><header><div class="wrap"><a href="/">← Manoja Chebrolu · Engineering Notes</a></div></header>
+<main class="wrap"><p class="meta">November 22, 2026 · Reliable AI · RAG evaluation</p>
+<h1>Why RAG Evaluation Must Separate Retrieval, Grounding, and Generation</h1>
+<p>Retrieval-augmented generation is often evaluated with a single end-to-end score: did the system answer correctly? That number is useful, but it is not diagnostic. A RAG pipeline can fail because the retriever missed the right evidence, because it retrieved too much irrelevant context, because the model ignored good evidence, or because the final answer was poorly formed even when the reasoning was grounded.</p>
+<p>For engineering decisions, those are different failures and they require different fixes. Treating them as one metric makes iteration slower and can encourage the wrong optimization.</p>
+
+<h2>1. Start with a component model of failure</h2>
+<p>The RAGAS work frames RAG evaluation as a multi-dimensional problem rather than a single answer-quality problem. It separates the quality of retrieved context from the model’s faithfulness to that context and from answer quality itself. That decomposition is useful even if a team chooses different concrete metrics, because it turns “the answer was wrong” into a question that can be localized.</p>
+<div class="callout"><strong>A practical decomposition:</strong> retrieval quality → context usability → grounding/faithfulness → final answer quality → operational cost and latency.</div>
+<p>Suppose a support assistant produces the wrong escalation queue. If the correct policy paragraph never appeared in the retrieved context, generation tuning will not solve the core issue. If the paragraph was present but surrounded by several obsolete policies, the problem may be context selection. If the model had the right evidence and still contradicted it, the failure is closer to grounding or instruction-following.</p>
+
+<h2>2. Evaluate retrieval before evaluating generation</h2>
+<p>A retriever should be tested on whether the evidence needed to answer a question appears in the candidate set. For labeled evaluation data, useful measures include recall at a fixed retrieval depth, ranking quality, and the amount of irrelevant material returned with the relevant material. In production traces, teams can additionally measure how often reviewers discover that a missing document—not model reasoning—caused the failure.</p>
+<p>This matters because larger context windows do not guarantee that supplying more text is harmless. Liu and colleagues’ <em>Lost in the Middle</em> study found that model performance can vary with the position of relevant information in long contexts, with relevant material in the middle often used less effectively than material near the beginning or end. The engineering implication is not that every model will reproduce the same curve. It is that “the evidence is somewhere in the prompt” is not a sufficient evaluation criterion.</p>
+
+<h2>3. Measure whether the answer is actually supported</h2>
+<p>Once retrieval is adequate, evaluate grounding separately. A grounded answer should be traceable to the supplied evidence and should avoid unsupported additions. For tasks with structured outputs, the evaluation should inspect each field rather than scoring the response only as a whole. A routing decision might be correct while its priority or cited evidence is wrong.</p>
+<p>One useful test set intentionally contains conflict: an old example suggests one action while a newer policy says another. The system should prefer the authoritative, current source. Another test removes the decisive evidence entirely. A reliable system should become uncertain, defer, or state that the evidence is insufficient rather than manufacture a confident answer.</p>
+
+<h2>4. Add operational metrics to the quality metrics</h2>
+<p>A RAG pipeline is still a production system. Accuracy gains can be offset by latency, cost, or reviewer burden. Track at least retrieval latency, end-to-end latency, context size, model usage, retry rate, and human correction rate alongside answer-quality metrics.</p>
+<p>NIST’s Generative AI Profile emphasizes evaluating generative AI throughout the lifecycle rather than treating model quality as a one-time benchmark result. For RAG systems, that translates naturally into versioned evaluation: when the corpus, chunking strategy, embedding model, ranking method, prompt, or generation model changes, rerun a stable test suite and compare the same dimensions.</p>
+
+<h2>5. Build an experiment matrix, not a demo set</h2>
+<p>A defensible RAG evaluation suite should include ordinary examples, ambiguous queries, missing-evidence cases, conflicting-policy cases, distractor-heavy retrieval, long-context cases, and stale-document cases. Keep the test set fixed while changing one component at a time. That makes it possible to say whether a change improved retrieval, grounding, or merely changed answer style.</p>
+<p>For each failure, store a small trace: query, retrieved items with ranks, authoritative evidence, model output, structured fields, and reviewer correction. Over time, these traces become more valuable than a single leaderboard score because they reveal recurring failure families.</p>
+
+<h2>Three takeaways</h2>
+<ol>
+<li><strong>Do not collapse the pipeline into one score.</strong> Retrieval, context use, grounding, and answer quality fail differently.</li>
+<li><strong>More context is not automatically better context.</strong> Evaluate whether relevant evidence is both present and usable.</li>
+<li><strong>Version the evaluation with the system.</strong> Corpus and retrieval changes deserve the same regression discipline as model and prompt changes.</li>
+</ol>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Es, S. et al. <a href="https://arxiv.org/abs/2309.15217">RAGAS: Automated Evaluation of Retrieval Augmented Generation</a>.</li>
+<li>Liu, N. F. et al. <a href="https://aclanthology.org/2024.tacl-1.9/">Lost in the Middle: How Language Models Use Long Contexts</a>, <em>Transactions of the Association for Computational Linguistics</em>, 2024.</li>
+<li>NIST. <a href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence">Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile (NIST AI 600-1)</a>.</li>
+</ol>
+<p class="meta">This note summarizes published evaluation ideas and engineering implications. It does not report a new experiment.</p>
+</main><footer><div class="wrap"><a href="/">Research site</a> · <a href="https://manojachebrolu.blogspot.com/">Blogger editions</a></div></footer></body></html>
