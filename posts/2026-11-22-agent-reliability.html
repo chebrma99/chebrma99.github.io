@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A reliability-focused framework for evaluating AI agents beyond one-shot task success.">
+<link rel="canonical" href="https://chebrma99.github.io/posts/2026-11-22-agent-reliability.html">
+<title>Agent Reliability Is More Than Task Success · Manoja Chebrolu</title>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.72 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.25em}.wrap{width:min(52rem,92%);margin:auto}
+header,footer{border-block:1px solid #d7ded5}header .wrap,footer .wrap{padding:1.1rem 0}
+main{padding:3rem 0 4rem}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.1}h1{font-size:clamp(2.6rem,7vw,4.8rem);letter-spacing:-.045em}h2{font-size:1.8rem;margin-top:2.5rem}
+.meta{color:#5f6e69}.callout{background:#eaf0e8;border-radius:.7rem;padding:1rem 1.2rem;margin:1.5rem 0}
+li{margin:.45rem 0}.refs li{margin:.7rem 0}code{background:#eceee9;padding:.1rem .25rem;border-radius:.2rem}
+</style></head>
+<body><header><div class="wrap"><a href="/">← Manoja Chebrolu · Engineering Notes</a></div></header>
+<main class="wrap"><p class="meta">November 22, 2026 · AI agents · Evaluation</p>
+<h1>Agent Reliability Is More Than Task Success</h1>
+<p>An AI agent can pass a task once and still be unreliable. That distinction matters when the system is allowed to call tools, modify state, follow policies, or interact with a user over multiple turns. A single success rate compresses all of that behavior into one number and hides the failure patterns engineers need to understand.</p>
+<p>For agentic systems, reliability should answer a harder question: <em>does the system repeatedly make acceptable decisions while respecting constraints across the entire trajectory?</em></p>
+
+<h2>1. Final success hides trajectory quality</h2>
+<p>AgentBoard was designed around this problem. Its authors argue that evaluating only final task success reveals little about what happened during a multi-step interaction, so the benchmark adds a progress-rate view and tooling for more fine-grained analysis. That is a useful design principle outside the benchmark itself: log intermediate decisions, not just the final outcome.</p>
+<p>Consider an agent asked to change a customer reservation. Two runs may end in the same final state, but one may have attempted an unauthorized action, recovered after an error, or called unnecessary tools. If the evaluation stores only “success,” those behaviors disappear.</p>
+
+<h2>2. Repeatability is part of correctness</h2>
+<p>The τ-bench work makes reliability explicit by evaluating agents over repeated trials and introducing <code>pass^k</code>, which asks whether behavior remains successful across multiple attempts. In the paper’s reported experiments, strong function-calling agents were still inconsistent across repeated runs. The broader lesson is durable: stochastic systems should be evaluated for variance, not only mean performance.</p>
+<p>A practical test therefore repeats the same scenario several times with controlled randomness. Track the probability of complete success, partial success, policy violation, tool error, unnecessary action, and escalation. A system that succeeds 85% of the time but violates policy in 5% of runs may be less deployable than a slower system with a lower headline success rate and far fewer unsafe trajectories.</p>
+
+<h2>3. Use state-based verification whenever possible</h2>
+<p>Natural-language judges are useful, but they should not be the only source of truth when an environment has machine-checkable state. τ-bench evaluates the resulting database state against an annotated goal state. SWE-bench similarly uses executable tests to determine whether a generated software patch actually resolves a real issue.</p>
+<p>This pattern generalizes well. For a workflow agent, define the state that should be true after the task: which record changed, which fields must remain untouched, which approval must exist, and which side effects are forbidden. Then evaluate the terminal state directly. Language-based grading can still assess explanation quality, but state verification makes the core action measurable.</p>
+
+<h2>4. Separate capability failures from policy failures</h2>
+<p>Agent evaluation should distinguish at least four failure families:</p>
+<ul>
+<li><strong>Planning:</strong> the agent chooses an invalid sequence of actions.</li>
+<li><strong>Tool use:</strong> it selects the wrong tool, malformed arguments, or mishandles an error.</li>
+<li><strong>Policy adherence:</strong> it completes the task but violates a rule or permission boundary.</li>
+<li><strong>Recovery:</strong> it fails to recognize that an action did not work and continues from an invalid state.</li>
+</ul>
+<p>This taxonomy makes remediation more targeted. Better prompting may help policy adherence; stronger schemas may reduce malformed calls; environment feedback can improve recovery; and a different planner may be needed for long-horizon failures.</p>
+
+<h2>5. Build reliability tests from trajectories</h2>
+<p>The most useful regression set often comes from real failure traces. For every incident or human correction, preserve a sanitized trajectory: starting state, user request, available tools, policy constraints, calls made, observations returned, final state, and reviewer verdict. Convert recurring failures into deterministic regression cases.</p>
+<p>Then add adversarial variants. Remove a required permission. Make a tool return a recoverable error. Give two tools similar names. Put a stale instruction next to a current policy. Ask the user to change their mind mid-conversation. Reliable agents need to handle these cases without silently drifting away from the intended state.</p>
+
+<h2>6. Report a reliability profile</h2>
+<p>Instead of one benchmark number, report a compact profile: task success, repeat-success across runs, policy-compliance rate, forbidden-action rate, average tool calls, recovery success, human-escalation rate, and cost/latency. Add confidence intervals when sample sizes permit. The goal is not to maximize the number of metrics; it is to preserve the dimensions that imply different engineering decisions.</p>
+
+<h2>Three takeaways</h2>
+<ol>
+<li><strong>Evaluate trajectories, not just endings.</strong> Intermediate actions reveal failures hidden by final success.</li>
+<li><strong>Repeat the same task.</strong> Reliability is partly about consistency under stochastic execution.</li>
+<li><strong>Verify machine state when you can.</strong> Use executable or state-based checks for actions, then reserve language judges for dimensions that genuinely require judgment.</li>
+</ol>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Ma, C. et al. <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/877b40688e330a0e2a3fc24084208dfa-Abstract-Datasets_and_Benchmarks_Track.html">AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents</a>, NeurIPS 2024.</li>
+<li>Yao, S. et al. <a href="https://arxiv.org/abs/2406.12045">τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains</a>.</li>
+<li>Jimenez, C. E. et al. <a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/edac78c3e300629acfe6cbe9ca88fb84-Abstract-Conference.html">SWE-bench: Can Language Models Resolve Real-World GitHub Issues?</a>, ICLR 2024.</li>
+</ol>
+<p class="meta">This note synthesizes published benchmark design patterns. It does not claim new benchmark results.</p>
+</main><footer><div class="wrap"><a href="/">Research site</a> · <a href="https://manojachebrolu.blogspot.com/">Blogger editions</a></div></footer></body></html>
