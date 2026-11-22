@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Manoja Chebrolu's research and engineering notes on evaluating reliable AI workflows.">
+<link rel="canonical" href="https://chebrma99.github.io/">
+<title>Manoja Chebrolu · Engineering Notes</title>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.65 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.25em}a:focus-visible{outline:2px solid #245f50;outline-offset:4px}.wrap{width:min(70rem,92%);margin:auto}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.2rem 0}header,footer{border-block:1px solid #d7ded5}nav{display:flex;gap:1.3rem;flex-wrap:wrap}nav a{text-decoration:none}.hero{padding:clamp(3rem,9vw,7rem) 0 3rem}.hero p{max-width:42rem;font-size:1.2rem}h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.08;margin:0}h1{font-size:clamp(3rem,9vw,7rem);letter-spacing:-.055em}h2{font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.035em}h3{font-size:clamp(1.6rem,4vw,2.4rem)}section{padding:2.6rem 0;border-top:1px solid #d7ded5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:1.25rem;margin-top:1.5rem}article{padding:clamp(1.2rem,4vw,2.4rem);border:1px solid #d7ded5;border-radius:.65rem;background:#fffefa}.note{background:#eaf0e8}article p,article ol{max-width:62ch}footer .wrap{padding:1.5rem 0}html{scroll-padding-top:1rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><strong>Manoja Chebrolu</strong><nav aria-label="Main navigation"><a href="#research">Research</a><a href="#writing">Writing</a><a href="https://github.com/chebrma99">GitHub</a></nav></div></header>
+<main class="wrap">
+<div class="hero"><h1>Manoja Chebrolu</h1><p>Software engineering and applied AI research, with a focus on context engineering and evaluating LLM workflows.</p></div>
+<section id="research"><h2>Research</h2><div class="grid">
+<article><h3>ContextBench</h3><p>A benchmark for evaluating context engineering strategies in LLM workflow automation.</p><a href="https://github.com/chebrma99/ContextBench">Explore the benchmark</a></article>
+</div></section>
+<section id="writing"><h2>Engineering notes</h2><div class="grid">
+<article class="note" id="evaluating-context"><h3>How to evaluate context in an LLM workflow</h3>
+<p>Start with one task and a clear definition of success. For ticket triage, a useful result might include a routing queue, a priority, and evidence from the ticket that supports both.</p>
+<ol><li><strong>Establish a baseline.</strong> Run the same tickets with the task instructions and no extra context. Record routing accuracy, schema validity, and how often a reviewer corrects the result.</li>
+<li><strong>Change one source at a time.</strong> Add a queue policy, then try a few labeled examples in a separate run. Hold the model and test cases fixed so you can compare the effect of each addition.</li>
+<li><strong>Test conflicting evidence.</strong> Include a ticket that resembles an old example but falls under a newer routing rule. Check whether the model follows the current policy and can point to the evidence behind its decision.</li></ol>
+<p>Track latency and review effort alongside accuracy. A small gain on routine tickets can be outweighed by extra review on ambiguous cases.</p>
+</article>
+</div></section>
+</main>
+<footer><div class="wrap"><a href="https://manojachebrolu.blogspot.com/">Blogger editions</a></div></footer>
+</body>
+</html>
