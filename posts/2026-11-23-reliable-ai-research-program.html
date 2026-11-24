@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A research synthesis connecting Manoja Chebrolu's work on context engineering, structured-output reliability, and large-scale video systems.">
+<link rel="canonical" href="https://chebrma99.github.io/posts/2026-11-23-reliable-ai-research-program.html">
+<title>Reliable AI Is a Systems Problem: Connecting Three Research Threads · Manoja Chebrolu</title>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.72 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.25em}.wrap{width:min(52rem,92%);margin:auto}
+header,footer{border-block:1px solid #d7ded5}header .wrap,footer .wrap{padding:1.1rem 0}
+main{padding:3rem 0 4rem}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.1}h1{font-size:clamp(2.6rem,7vw,4.8rem);letter-spacing:-.045em}h2{font-size:1.8rem;margin-top:2.5rem}
+.meta{color:#5f6e69}.callout{background:#eaf0e8;border-radius:.7rem;padding:1rem 1.2rem;margin:1.5rem 0}
+li{margin:.45rem 0}.refs li{margin:.7rem 0}
+</style></head>
+<body><header><div class="wrap"><a href="/">← Manoja Chebrolu · Engineering Notes</a></div></header>
+<main class="wrap"><p class="meta">November 23, 2026 · Research synthesis · Reliable AI systems</p>
+<h1>Reliable AI Is a Systems Problem: Connecting Three Research Threads</h1>
+
+<p>My recent research has focused on a recurring question: when an AI system is placed inside a real workflow, what actually determines whether it behaves reliably?</p>
+
+<p>That question appears in different forms across three pieces of work: <em>ContextBench</em>, a study of structured-output reliability in enterprise LLM workflows, and a systems review of engagement optimization in large-scale video platforms. At first glance these topics span context engineering, workflow automation, and recommender systems. The common thread is that end-to-end behavior depends on more than a single model score.</p>
+
+<div class="callout"><strong>Working thesis:</strong> reliable AI emerges from the interaction between information quality, interfaces, evaluation, system constraints, and feedback loops—not from model capability alone.</div>
+
+<h2>1. ContextBench: reliability begins with what the model is allowed to see</h2>
+
+<p><a href="https://doi.org/10.5281/zenodo.20823546">ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</a> asks a practical question: how do different context strategies change the behavior of the same workflow?</p>
+
+<p>The benchmark keeps the task fixed and varies the information environment around the model. Its initial ticket-triage setup compares prompt-only, retrieval-augmented, steering-document, memory-file, and combined-context conditions. The goal is not simply to measure answer accuracy. It also tracks schema validity, instruction following, evidence behavior, confidence, and human-review burden.</p>
+
+<p>This matters because many failures attributed to “the model” are actually context failures: missing evidence, stale guidance, irrelevant retrieval, conflicting policy, or important information that is technically present but poorly prioritized. A context-engineering evaluation therefore needs to isolate which information source changed the result and whether the model used that source appropriately.</p>
+
+<p>The open-source implementation is available in the <a href="https://github.com/chebrma99/ContextBench">ContextBench repository</a>, making the evaluation setup inspectable and extensible.</p>
+
+<h2>2. Structured outputs: syntactic validity is only the first layer</h2>
+
+<p>My second research thread, <a href="https://doi.org/10.5281/zenodo.20823975">Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review</a>, focuses on a different boundary: the interface between a language model and downstream software.</p>
+
+<p>JSON schemas and constrained output formats are useful because they turn free-form generation into a machine-consumable contract. But valid structure does not guarantee a valid decision. A response can satisfy a schema while containing the wrong classification, unsupported evidence, a stale policy interpretation, or an action that violates business constraints.</p>
+
+<p>That suggests a layered notion of reliability. First, can the response be parsed? Second, does it satisfy the schema? Third, are the field values semantically correct? Fourth, are claims grounded in available evidence? Fifth, is the resulting action acceptable under workflow rules? Recovery and human escalation matter because production systems need a safe response when any one of these checks fails.</p>
+
+<p>This complements ContextBench. Context engineering studies what enters the model; structured-output reliability studies what leaves it and how downstream systems should validate it.</p>
+
+<h2>3. Video engagement optimization: reliability also depends on the surrounding system</h2>
+
+<p>The third thread moves beyond LLM workflows. <a href="https://doi.org/10.33767/osf.io/gp8vy_v2">Engagement Optimization in Large-Scale Video Platforms: A Systems Review of Metrics, Ranking, Experimentation, Latency, and Feedback Loops</a> examines engagement as an end-to-end systems property.</p>
+
+<p>A recommendation model does not operate in isolation. Observed engagement depends on which proxy metrics are optimized, how candidate generation and ranking stages interact, how quickly results are served, how experiments are interpreted, and how recommendations change the future data used for training and personalization.</p>
+
+<p>The same systems lesson appears here: a locally strong component can still produce a weak global outcome. A ranking model can improve an offline metric while latency degrades user experience. A short-term engagement objective can increase clicks while weakening long-term satisfaction. A feedback loop can amplify what the system already prefers and distort future observations.</p>
+
+<p>The paper is also independently indexed through services such as RePEc/EconPapers, which helps make the work discoverable outside the original OSF/MediArXiv record.</p>
+
+<h2>4. The shared research direction</h2>
+
+<p>Across these papers, I see four recurring engineering principles.</p>
+
+<ol>
+<li><strong>Evaluate systems at their boundaries.</strong> Measure retrieval inputs, model outputs, downstream actions, and user-facing outcomes separately enough to diagnose failure.</li>
+<li><strong>Preserve provenance.</strong> A reliable decision should be traceable to the context, evidence, policy, or experiment that produced it.</li>
+<li><strong>Treat human review as part of the design.</strong> Reliability is not only autonomous accuracy; it also includes knowing when the system should defer or ask for review.</li>
+<li><strong>Measure feedback effects over time.</strong> Context memories, workflow corrections, and recommender feedback loops all change the future state of the system.</li>
+</ol>
+
+<h2>5. Where this leads next</h2>
+
+<p>The natural next step is to connect these ideas more explicitly. For LLM agents, that means evaluating not just task completion but context provenance, structured decisions, policy compliance, tool execution, and recovery. For multimodal systems, it means testing whether retrieved evidence is temporally grounded and whether the final answer can be traced back to the relevant segment. For production AI generally, it means treating evaluation as a continuous systems discipline rather than a one-time benchmark.</p>
+
+<p>I am particularly interested in reproducible benchmarks where researchers can vary one part of the system—context source, retrieval policy, output contract, recovery rule, or human-review threshold—while keeping the rest fixed. That kind of controlled evaluation can turn vague reliability claims into measurable engineering questions.</p>
+
+<h2>Three takeaways</h2>
+<ol>
+<li><strong>Model quality is only one variable.</strong> Context, interfaces, system constraints, and feedback loops all shape final behavior.</li>
+<li><strong>Reliability should be decomposed.</strong> Diagnostic metrics are more useful than a single end-to-end score when engineering a production system.</li>
+<li><strong>Reproducibility matters.</strong> Open artifacts, explicit evaluation conditions, and traceable evidence make results easier to test, extend, and build upon.</li>
+</ol>
+
+<h2>Research referenced</h2>
+<ol class="refs">
+<li>Chebrolu, M. <a href="https://doi.org/10.5281/zenodo.20823546">ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</a>. Zenodo, 2026.</li>
+<li>Chebrolu, M. <a href="https://doi.org/10.5281/zenodo.20823975">Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review</a>. Zenodo, 2026.</li>
+<li>Chebrolu, M. <a href="https://doi.org/10.33767/osf.io/gp8vy_v2">Engagement Optimization in Large-Scale Video Platforms: A Systems Review of Metrics, Ranking, Experimentation, Latency, and Feedback Loops</a>. MediArXiv/OSF, 2026.</li>
+</ol>
+
+<p class="meta">Google Scholar is a discovery and citation index rather than the publisher of these works. The links above point to the primary research records.</p>
+</main><footer><div class="wrap"><a href="/">Research site</a> · <a href="https://scholar.google.com/citations?user=tmlAIyMAAAAJ&hl=en">Google Scholar profile</a></div></footer></body></html>
