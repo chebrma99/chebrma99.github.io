@@ -19,14 +19,12 @@ h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.08}h1{font-size:cl
 h2{font-size:1.75rem;margin-top:2.4rem}.meta{color:#5f6e69}.card{background:#fffefa;border:1px solid #d7ded5;border-radius:.7rem;padding:1.2rem;margin:1.4rem 0}
 pre{white-space:pre-wrap;overflow:auto;background:#eaf0e8;padding:1rem;border-radius:.6rem;font-size:.88rem}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .links{display:flex;gap:1rem;flex-wrap:wrap}.small{font-size:.92rem;color:#5f6e69}
-</style></head><body>
+.citation_author{font-size:1.18rem;margin:.45rem 0 1rem}</style></head><body>
 <header><div class="wrap"><a href="/">← Manoja Chebrolu · Research</a></div></header>
 <main class="wrap">
 <p class="meta">Research record · Zenodo · June 24, 2026</p>
 <h1>ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</h1>
-<p>ContextBench is an open-source benchmark framework for evaluating how context strategies affect LLM workflow reliability. Its initial software-ticket-triage task keeps the task set fixed while comparing prompt-only, RAG-only, steering-document-only, memory-file-only, and combined-context conditions.</p>
-<p>The benchmark tracks classification quality, JSON/schema validity, instruction following, evidence behavior, confidence, human-review burden, latency, and token usage when available. The goal is to make context-engineering decisions measurable and reproducible rather than treating context as an opaque prompt-design choice.</p>
-<div class="card"><h2>Research links</h2><div class="links">
+<p class="citation_author"><strong>Manoja Chebrolu</strong></p>\n<h2>Abstract</h2>\n<p>Large language model (LLM) workflow systems depend on external context such as retrieval-augmented generation (RAG) documents, steering documents, memory files, output schemas, and task-specific policies. Yet many production failures arise not from the base model alone, but from missing, stale, conflicting, excessive, or poorly prioritized context. This paper presents ContextBench, a benchmark framework for evaluating context engineering strategies in reliable LLM workflow automation. ContextBench compares six controlled conditions: prompt-only, RAG-only, steering-document-only, memory-file-only, RAG with steering, and a combined RAG-steering-memory context package. The benchmark is evaluated on a 50-task software ticket-triage dataset using OpenAI gpt-4o-mini at temperature 0.0. Results show high category accuracy across conditions, with RAG-enabled setups reaching 0.980 category accuracy, while memory-only achieved the highest customer-impact F1 of 0.755. All outputs passed strict schema validation. However, priority prediction and human-review routing remained challenging, with priority mismatch and human-review mismatch dominating the error analysis. These findings suggest that context strategies improve different reliability dimensions and should be evaluated as modular workflow components rather than treated as generic prompt additions.</p>\n<div class="card"><h2>Research links</h2><div class="links">
 <a href="https://doi.org/10.5281/zenodo.20823546">Primary Zenodo record / DOI</a>
 <a href="https://github.com/chebrma99/ContextBench">Open-source benchmark</a>
 <a href="https://scholar.google.com/citations?user=tmlAIyMAAAAJ&hl=en">Google Scholar</a>
