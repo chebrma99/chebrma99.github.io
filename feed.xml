@@ -5,6 +5,7 @@
 <link>https://chebrma99.github.io/</link>
 <description>Research and engineering notes on reliable AI systems, context engineering, evaluation, and production AI.</description>
 <language>en-us</language>
+<item><title>What Should a Context Benchmark Measure? ContextBench and RAGCap-Bench</title><link>https://chebrma99.github.io/posts/2026-11-23-contextbench-ragcap-comparison.html</link><guid>https://chebrma99.github.io/posts/2026-11-23-contextbench-ragcap-comparison.html</guid><pubDate>Mon, 23 Nov 2026 21:30:00 -0800</pubDate></item>
 <item><title>Reliable AI Is a Systems Problem: Connecting Three Research Threads</title><link>https://chebrma99.github.io/posts/2026-11-23-reliable-ai-research-program.html</link><guid>https://chebrma99.github.io/posts/2026-11-23-reliable-ai-research-program.html</guid><pubDate>Mon, 23 Nov 2026 08:30:00 -0800</pubDate></item>
 <item><title>Structured Output Reliability: Why Valid JSON Is Not Enough</title><link>https://chebrma99.github.io/posts/2026-11-23-structured-output-reliability.html</link><guid>https://chebrma99.github.io/posts/2026-11-23-structured-output-reliability.html</guid><pubDate>Mon, 23 Nov 2026 08:00:00 -0800</pubDate></item>
 <item><title>Why RAG Evaluation Must Separate Retrieval, Grounding, and Generation</title><link>https://chebrma99.github.io/posts/2026-11-22-rag-evaluation.html</link><guid>https://chebrma99.github.io/posts/2026-11-22-rag-evaluation.html</guid><pubDate>Sun, 22 Nov 2026 12:00:00 -0800</pubDate></item>
