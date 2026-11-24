@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>Manoja Chebrolu · Engineering Notes</title>
+<link>https://chebrma99.github.io/</link>
+<description>Research and engineering notes on reliable AI systems, context engineering, evaluation, and production AI.</description>
+<language>en-us</language>
+<item><title>Reliable AI Is a Systems Problem: Connecting Three Research Threads</title><link>https://chebrma99.github.io/posts/2026-11-23-reliable-ai-research-program.html</link><guid>https://chebrma99.github.io/posts/2026-11-23-reliable-ai-research-program.html</guid><pubDate>Mon, 23 Nov 2026 08:30:00 -0800</pubDate></item>
+<item><title>Structured Output Reliability: Why Valid JSON Is Not Enough</title><link>https://chebrma99.github.io/posts/2026-11-23-structured-output-reliability.html</link><guid>https://chebrma99.github.io/posts/2026-11-23-structured-output-reliability.html</guid><pubDate>Mon, 23 Nov 2026 08:00:00 -0800</pubDate></item>
+<item><title>Why RAG Evaluation Must Separate Retrieval, Grounding, and Generation</title><link>https://chebrma99.github.io/posts/2026-11-22-rag-evaluation.html</link><guid>https://chebrma99.github.io/posts/2026-11-22-rag-evaluation.html</guid><pubDate>Sun, 22 Nov 2026 12:00:00 -0800</pubDate></item>
+<item><title>Agent Reliability Is More Than Task Success</title><link>https://chebrma99.github.io/posts/2026-11-22-agent-reliability.html</link><guid>https://chebrma99.github.io/posts/2026-11-22-agent-reliability.html</guid><pubDate>Sun, 22 Nov 2026 11:00:00 -0800</pubDate></item>
+</channel></rss>
