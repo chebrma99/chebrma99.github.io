@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Structured Output Reliability in Enterprise LLM Workflow Systems · Manoja Chebrolu</title>
+<meta name="description" content="Research on schema validation, recovery policies, and human review for reliable structured outputs in enterprise LLM workflows.">
+<meta name="citation_title" content="Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review">
+<meta name="citation_author" content="Manoja Chebrolu">
+<meta name="citation_publication_date" content="2026/06/24">
+<meta name="citation_doi" content="10.5281/zenodo.20823975">
+<meta name="citation_abstract_html_url" content="https://chebrma99.github.io/research/structured-output-reliability.html">
+<meta name="citation_keywords" content="structured outputs; schema validation; LLM reliability; human review; workflow automation; recovery">
+<link rel="canonical" href="https://chebrma99.github.io/research/structured-output-reliability.html">
+<link rel="alternate" type="application/rss+xml" title="Manoja Chebrolu Engineering Notes" href="/feed.xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ScholarlyArticle","headline":"Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review","author":{"@type":"Person","name":"Manoja Chebrolu","sameAs":["https://orcid.org/0009-0008-2568-7474","https://scholar.google.com/citations?user=tmlAIyMAAAAJ&hl=en"]},"datePublished":"2026-06-24","identifier":"https://doi.org/10.5281/zenodo.20823975","url":"https://chebrma99.github.io/research/structured-output-reliability.html","keywords":["structured outputs","schema validation","LLM reliability","human review","workflow automation"]}</script>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.72 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.22em}.wrap{width:min(54rem,92%);margin:auto}
+header,footer{border-block:1px solid #d7ded5}header .wrap,footer .wrap{padding:1.1rem 0}main{padding:3rem 0 4rem}
+h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.08}h1{font-size:clamp(2.5rem,7vw,4.6rem);letter-spacing:-.04em}
+h2{font-size:1.75rem;margin-top:2.4rem}.meta{color:#5f6e69}.card{background:#fffefa;border:1px solid #d7ded5;border-radius:.7rem;padding:1.2rem;margin:1.4rem 0}
+pre{white-space:pre-wrap;overflow:auto;background:#eaf0e8;padding:1rem;border-radius:.6rem;font-size:.88rem}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.links{display:flex;gap:1rem;flex-wrap:wrap}.small{font-size:.92rem;color:#5f6e69}
+</style></head><body>
+<header><div class="wrap"><a href="/">← Manoja Chebrolu · Research</a></div></header>
+<main class="wrap">
+<p class="meta">Research record · Zenodo · June 24, 2026</p>
+<h1>Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review</h1>
+<p>This work examines a practical production problem: machine-readable output is not necessarily decision-correct output. An LLM response can satisfy a JSON schema while still containing a wrong classification, unsupported evidence, stale policy interpretation, or an action that downstream software should not execute.</p>
+<p>The research therefore treats reliability as layered: parseability, schema validity, semantic correctness, evidence grounding, workflow-rule compliance, recovery behavior, and appropriate human escalation. This framing helps separate interface failures from reasoning and policy failures.</p>
+<div class="card"><h2>Research links</h2><div class="links">
+<a href="https://doi.org/10.5281/zenodo.20823975">Primary Zenodo record / DOI</a>
+<a href="/posts/2026-11-23-structured-output-reliability.html">Engineering note</a>
+<a href="https://scholar.google.com/citations?user=tmlAIyMAAAAJ&hl=en">Google Scholar</a>
+<a href="https://orcid.org/0009-0008-2568-7474">ORCID</a>
+<a href="/research/research.bib">BibTeX file</a>
+</div></div>
+<h2>Why this matters</h2>
+<p>Structured generation is an interface contract. A robust workflow still needs semantic validation, evidence checks, business invariants, retry or repair policies, and a human-review path for cases that should not be automated.</p>
+<h2>Citation</h2>
+<pre><code>@misc{chebrolu2026structured,
+  author    = {Chebrolu, Manoja},
+  title     = {Structured Output Reliability in Enterprise LLM Workflow Systems: A Study of Schema Validation, Recovery Policies, and Human Review},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.20823975},
+  url       = {https://doi.org/10.5281/zenodo.20823975}
+}</code></pre>
+</main><footer><div class="wrap"><a href="/">Research site</a> · <a href="/posts/2026-11-23-reliable-ai-research-program.html">Research synthesis</a></div></footer>
+</body></html>
