@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A technical comparison of context-strategy evaluation in ContextBench and capability-oriented evaluation in RAGCap-Bench.">
+<link rel="canonical" href="https://chebrma99.github.io/posts/2026-11-23-contextbench-ragcap-comparison.html">
+<title>What Should a Context Benchmark Measure? ContextBench and RAGCap-Bench · Manoja Chebrolu</title>
+<style>
+:root{color-scheme:light;background:#f7f6f0;color:#172f2b;font:1rem/1.72 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}a{color:#245f50;text-underline-offset:.25em}.wrap{width:min(52rem,92%);margin:auto}
+header,footer{border-block:1px solid #d7ded5}header .wrap,footer .wrap{padding:1.1rem 0}
+main{padding:3rem 0 4rem}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.1}h1{font-size:clamp(2.5rem,7vw,4.6rem);letter-spacing:-.045em}h2{font-size:1.8rem;margin-top:2.5rem}
+.meta{color:#5f6e69}.callout{background:#eaf0e8;border-radius:.7rem;padding:1rem 1.2rem;margin:1.5rem 0}li{margin:.45rem 0}.refs li{margin:.7rem 0}
+</style></head>
+<body><header><div class="wrap"><a href="/">← Manoja Chebrolu · Engineering Notes</a></div></header>
+<main class="wrap">
+<p class="meta">November 23, 2026 · Context engineering · Benchmark design</p>
+<h1>What Should a Context Benchmark Measure? ContextBench and RAGCap-Bench</h1>
+
+<p>As retrieval-augmented and agentic systems become more complex, “evaluate the answer” is no longer enough. The final response can be wrong because retrieval failed, because the model used the wrong evidence, because the context package was poorly designed, or because an intermediate capability broke before generation ever reached the final answer.</p>
+
+<p>Two benchmark designs illustrate complementary ways to make those failures measurable. <a href="https://doi.org/10.5281/zenodo.20823546"><em>ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</em></a> varies the context strategy around a fixed workflow. <a href="https://aclanthology.org/2026.aacl-long.245/"><em>RAGCap-Bench: Benchmarking Capabilities of LLMs in Agentic Retrieval Augmented Generation Systems</em></a>, published at AACL-IJCNLP 2026, decomposes agentic RAG into intermediate tasks and capabilities. The two approaches ask different questions, and together they suggest a useful evaluation design space.</p>
+
+<div class="callout"><strong>Context strategy asks:</strong> what information environment should the model receive? <strong>Capability evaluation asks:</strong> can the model perform the intermediate operations required by the pipeline?</div>
+
+<h2>1. ContextBench changes the information environment</h2>
+
+<p>ContextBench holds the ticket-triage task set fixed while comparing multiple context conditions: prompt-only, RAG-only, steering-document-only, memory-file-only, RAG plus steering, and RAG plus steering plus memory. The benchmark tracks task correctness alongside schema adherence, evidence behavior, confidence, human-review burden, and operational metrics when available.</p>
+
+<p>This is useful when the engineering decision is architectural. Should a workflow rely on retrieval, a stable policy document, accumulated memory, or some combination? If the underlying model and task set remain fixed, differences across conditions can be attributed more directly to how context is assembled and supplied.</p>
+
+<p>The benchmark is intentionally open and inspectable. Its repository exposes the context packages, task data, gold labels, run configuration, model outputs, and error-analysis artifacts so individual failures can be audited rather than hidden behind a single score.</p>
+
+<h2>2. RAGCap-Bench changes the unit of evaluation</h2>
+
+<p>RAGCap-Bench begins from a different observation: agentic RAG systems perform multiple intermediate tasks while planning, retrieving, and reasoning. A final end-to-end score does not reveal which internal capability caused a failure.</p>
+
+<p>The paper therefore builds a capability-oriented benchmark from common intermediate tasks in agentic RAG workflows and a taxonomy of errors observed in system outputs. Its reported experiments find that models with stronger performance on these intermediate capabilities also achieve stronger end-to-end results, supporting the usefulness of diagnostic capability evaluation.</p>
+
+<p>This kind of decomposition is valuable when the system architecture is already known but the model or agent needs to be diagnosed. Rather than asking only whether the final answer is correct, the evaluator can ask whether the system can execute the particular retrieval, reasoning, and intermediate operations the workflow depends on.</p>
+
+<h2>3. These are two different experimental axes</h2>
+
+<p>The distinction can be expressed as a simple experiment matrix.</p>
+
+<ul>
+<li><strong>Axis A — context policy:</strong> prompt, retrieval, steering, memory, combinations, freshness rules, or prioritization.</li>
+<li><strong>Axis B — agent capability:</strong> query interpretation, planning, retrieval decisions, evidence integration, intermediate reasoning, verification, or recovery.</li>
+</ul>
+
+<p>ContextBench primarily varies Axis A. RAGCap-Bench primarily diagnoses Axis B. A broader benchmark could vary both.</p>
+
+<p>For example, imagine an agent performing enterprise ticket triage. A failure under a RAG-only condition could mean that retrieval returned the wrong policy. But if the correct policy was returned, the failure might instead reflect weak evidence integration or a planning error. Varying context strategy tells us whether a different information policy helps; capability-level evaluation tells us why the existing pipeline broke.</p>
+
+<h2>4. A useful benchmark should preserve failure provenance</h2>
+
+<p>The shared lesson is not that every benchmark needs dozens of metrics. It is that an evaluation should preserve enough provenance to distinguish interventions.</p>
+
+<p>If a failure is caused by missing evidence, improve retrieval or context construction. If evidence is present but ignored, evaluate grounding and context use. If the agent chooses an invalid intermediate action, investigate planning or tool-use capability. If the output is semantically correct but violates a machine-readable contract, improve structured-output handling and recovery.</p>
+
+<p>Without this decomposition, teams can spend time tuning the wrong layer.</p>
+
+<h2>5. Where context evaluation can go next</h2>
+
+<p>The next generation of context benchmarks should test not only static context packages but also changing context over time: stale memories, contradictory policies, retrieval freshness, context compression, provenance, and recovery after missing or conflicting evidence.</p>
+
+<p>This direction is also visible in the current research community. The WSDM 2027 <a href="https://context4agents.github.io/">Context4Agents workshop</a> explicitly calls for work on retrieval, memory, context engineering, provenance, reliability, and efficiency, with an emphasis on how context changes over time. Its scope reinforces the idea that context management is becoming an evaluation problem in its own right, not merely a prompting technique.</p>
+
+<h2>Three takeaways</h2>
+<ol>
+<li><strong>Separate context policy from model capability.</strong> Changing the information environment and diagnosing intermediate skills answer different engineering questions.</li>
+<li><strong>Preserve traces.</strong> A benchmark is much more useful when a failure can be localized to retrieval, context use, planning, output formation, or policy compliance.</li>
+<li><strong>Evaluate dynamic context next.</strong> Staleness, conflict, memory updates, provenance, and recovery are natural extensions beyond static benchmark conditions.</li>
+</ol>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Chebrolu, M. <a href="https://doi.org/10.5281/zenodo.20823546">ContextBench: Evaluating Context Engineering Strategies for Reliable LLM Workflow Automation</a>. Zenodo, 2026. Open-source implementation: <a href="https://github.com/chebrma99/ContextBench">GitHub</a>.</li>
+<li>Lin, J., Zhang, C., Liu, Y., and Li, H. <a href="https://aclanthology.org/2026.aacl-long.245/">RAGCap-Bench: Benchmarking Capabilities of LLMs in Agentic Retrieval Augmented Generation Systems</a>. AACL-IJCNLP 2026.</li>
+<li><a href="https://context4agents.github.io/">Context4Agents: Contextual Intelligence for AI Agents</a>. WSDM 2027 Workshop.</li>
+</ol>
+<p class="meta">This article is a methodological comparison based on the public benchmark descriptions. It does not claim that the two benchmarks are directly comparable on the same datasets or models.</p>
+</main><footer><div class="wrap"><a href="/research/contextbench.html">ContextBench research page</a> · <a href="/">Research site</a></div></footer></body></html>
